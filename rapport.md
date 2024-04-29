@@ -1,4 +1,5 @@
 # Rapport - Laboratoire 4
+
 ### Auteurs : Rafael Dousse & Benoît Delay
 
 ## Introduction
@@ -7,8 +8,22 @@ Ce laboratoire vise à développer un système d'acquisition multimédia capable
 
 ## Etape 1 : Audio
 
-1 / ((frequence echantillonae * nbCanaux * nbByte)/ tailleBuffer )
+Pour determiner la periode de la tache Audio j'ai utilisé le calcul suivant
+$$ periode = {1 \over (frequence*echantillonage * nbCanaux \_ sizeof(uint16_t) / taille_buffer)}s $$
 
+Le calcul s'explique de la facon suivante:
+
+- On prends la frequence d'echantillonage
+- On la multiplie par le nombre de canal
+- On la mutliplie par 2 car l'information est sur 2 octes
+
+Avec ceci nous obtenons la fréquence a laquelle il faudrait lire byte par byte. Néanmoins, vu que nous avons 2 buffer de 128 byte nous pouvons lire tous les 256 bytes le buffer donc nous divisions cette frequence par 256.
+
+Puis vu que $$ temps = {1 \over frequence}$$
+
+On applique cette formule et nous obtenons 1.3ms.
+
+Etant donné que la fonction `rt_task_set_periodic` demande une période en nanoseconde nous effectuons la conversion ce qui donne 1333333 ns
 
 ## Etape 2 : Video
 
@@ -16,13 +31,13 @@ Cette étape a pour but de mettre en place la tâche vidéo qui va lire un fichi
 
 - On sait qu'on doit avoir 15 images par secondes, donc une image doit être affichée toutes les 1/15 secondes ce qui donne 0.066 s ou 66666666 ns.
 
-- La mémoire alloué qui est nécessaire pour affiché une frame a été calculé de cette manière: 320 * 240 * 4 nous donne un total de  307200 bytes qui est aussi la taille d'une image.
+- La mémoire alloué qui est nécessaire pour affiché une frame a été calculé de cette manière: 320 _ 240 _ 4 nous donne un total de 307200 bytes qui est aussi la taille d'une image.
 
 Pour savoir combien de frame contient le fichier et la durée de la vidéo, on peut faire le calcul suivant:
-La taille du fichier vidéo est de 87.9 MB ce qui donne plus ou moins 92169830.4 bytes. Ainsi, la taille total du fichier divisé par la taille pour une frame nous donne le nombres de frame: 92169830.4  / 307200 = 300 frames. Finalement, on peut calculer la durée de la vidéo en secondes: 300 / 15 = 20 secondes.
+La taille du fichier vidéo est de 87.9 MB ce qui donne plus ou moins 92169830.4 bytes. Ainsi, la taille total du fichier divisé par la taille pour une frame nous donne le nombres de frame: 92169830.4 / 307200 = 300 frames. Finalement, on peut calculer la durée de la vidéo en secondes: 300 / 15 = 20 secondes.
 
 ## Problème rencontré
 
-Son qui se coupe quand enregistre. On a mit sur une cpu chacun. 
+Son qui se coupe quand enregistre. On a mit sur une cpu chacun.
 
-On a aussi on problème des délais dépassé. On pourrait changé la priorité de la tâche audio pour qu'elle soit plus haute que la tâche vidéo. (genre set affinity ou le 99 de  rt_task_create(&audio, "Audio Timer", 0, 99, T_))
+On a aussi on problème des délais dépassé. On pourrait changé la priorité de la tâche audio pour qu'elle soit plus haute que la tâche vidéo. (genre set affinity ou le 99 de rt*task_create(&audio, "Audio Timer", 0, 99, T*))
