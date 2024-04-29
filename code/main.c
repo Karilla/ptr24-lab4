@@ -1,4 +1,4 @@
-#include <unistd.h>
+éc#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -10,6 +10,8 @@
 #include <alchemy/task.h>
 #include <alchemy/timer.h>
 #include "audio_utils.h"
+
+
 
 #define PERIOD_AUDIO 1333333 // 1/((48000 * 2 * 2) /256)
 #define PERIOD_VIDEO 66666666
@@ -106,6 +108,7 @@ void video_task(void *arg)
 	int err;
 
 	rt_task_set_periodic(rt_task_self(), TM_NOW, PERIOD_VIDEO);
+	
 
 	fd_raw = open("/usr/resources/output_video.raw", O_RDONLY);
 	while ((read_switch(0) & SWITCH_1) > 0)
@@ -203,8 +206,8 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	free(audio_data);
-	free(video_data);
+	//free(audio_data);
+	//ree(video_data);
 
 	rt_task_delete(&audio);
 	rt_task_delete(&video);
