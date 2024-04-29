@@ -1,4 +1,4 @@
-éc#include <unistd.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -10,8 +10,6 @@
 #include <alchemy/task.h>
 #include <alchemy/timer.h>
 #include "audio_utils.h"
-
-
 
 #define PERIOD_AUDIO 1333333 // 1/((48000 * 2 * 2) /256)
 #define PERIOD_VIDEO 66666666
@@ -79,16 +77,6 @@ void audio_task(void *arg)
 		previous = now;
 
 		count = (count + 1) % 15;
-		/**
-				if (count == 14)
-				{
-					rt_printf("Time taken by audio\n");
-
-					for (int i = 0; i < count; i++)
-					{
-						rt_printf("%lld\n", diff[i]);
-					}
-				}*/
 	}
 	free(arg);
 	close(fd_wav);
@@ -108,9 +96,14 @@ void video_task(void *arg)
 	int err;
 
 	rt_task_set_periodic(rt_task_self(), TM_NOW, PERIOD_VIDEO);
-	
 
 	fd_raw = open("/usr/resources/output_video.raw", O_RDONLY);
+	if (fd_raw == NULL)
+	{
+		rt_printf("Error opening video file\n");
+		free(arg);
+		exit(EXIT_FAILURE);
+	}
 	while ((read_switch(0) & SWITCH_1) > 0)
 	{
 		now = rt_timer_read();
@@ -162,6 +155,7 @@ int main(int argc, char *argv[])
 	cpu_set_t cpu1;
 	CPU_SET(0, &cpu0);
 	CPU_SET(1, &cpu1);
+
 	// Initialisation
 	init_audio();
 	init_video();
@@ -185,18 +179,24 @@ int main(int argc, char *argv[])
 	if (rt_task_create(&audio, "Audio Timer", 0, 99, T_JOINABLE) != 0 || rt_task_create(&video, "Video Timer", 0, 99, T_JOINABLE) != 0)
 	{
 		rt_printf("Error creating audio task\n");
+		free(audio_data);
+		free(video_data);
 		exit(EXIT_FAILURE);
 	}
 
 	if (rt_task_set_affinity(&audio, &cpu0) != 0 || rt_task_set_affinity(&video, &cpu1) != 0)
 	{
 		rt_printf("Error creating audio task\n");
+		free(audio_data);
+		free(video_data);
 		exit(EXIT_FAILURE);
 	}
 
 	if (rt_task_start(&audio, &audio_task, audio_data) != 0 || rt_task_start(&video, &video_task, video_data) != 0)
 	{
 		rt_printf("Error starting task\n");
+		free(audio_data);
+		free(video_data);
 		exit(EXIT_FAILURE);
 	}
 
@@ -205,9 +205,6 @@ int main(int argc, char *argv[])
 		rt_printf("Error joining task\n");
 		exit(EXIT_FAILURE);
 	}
-
-	//free(audio_data);
-	//ree(video_data);
 
 	rt_task_delete(&audio);
 	rt_task_delete(&video);
