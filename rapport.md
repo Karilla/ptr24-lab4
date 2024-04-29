@@ -36,6 +36,10 @@ Cette étape a pour but de mettre en place la tâche vidéo qui va lire un fichi
 Pour savoir combien de frame contient le fichier et la durée de la vidéo, on peut faire le calcul suivant:
 La taille du fichier vidéo est de 87.9 MB ce qui donne plus ou moins 92169830.4 bytes. Ainsi, la taille total du fichier divisé par la taille pour une frame nous donne le nombres de frame: 92169830.4 / 307200 = 300 frames. Finalement, on peut calculer la durée de la vidéo en secondes: 300 / 15 = 20 secondes.
 
+## Etape 3 : Caractérisation des tâches
+
+
+
 ## Problème rencontré
 
 Son qui se coupe quand enregistre. On a mit sur une cpu chacun.
