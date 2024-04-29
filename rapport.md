@@ -39,6 +39,51 @@ La taille du fichier vidéo est de 87.9 MB ce qui donne plus ou moins 92169830.4
 ## Etape 3 : Caractérisation des tâches
 
 
+### Mesure
+
+- Audio:
+
+  Total of 50 values 
+    Minimum  = 1306350.000000 (position = 0) 
+    Maximum  = 1353670.000000 (position = 12) 
+    Sum      = 66611700.000000 
+    Mean     = 1332234.000000 
+    Variance = 75105432.000000 
+    Std Dev  = 8666.339019 
+    CoV      = 0.006505 
+
+- Audio avec enregistrement
+
+  Total of 50 values 
+    Minimum  = 1166800.000000 (position = 5) 
+    Maximum  = 2478740.000000 (position = 23) 
+    Sum      = 67056970.000000 
+    Mean     = 1368509.591837 
+    Variance = 64876166248.811768 
+    Std Dev  = 254708.001933 
+    CoV      = 0.186121 
+
+- Video
+
+  Total of 50 values 
+    Minimum  = 66631740.000000 (position = 0) 
+    Maximum  = 66673860.000000 (position = 22) 
+    Sum      = 3266541440.000000 
+    Mean     = 66664111.020408 
+    Variance = 93504727.500000 
+    Std Dev  = 9669.784253 
+    CoV      = 0.000145 
+
+- Video avec enregistrement
+
+Total of 50 values 
+    Minimum  = 66635050.000000 (position = 14) 
+    Maximum  = 66680460.000000 (position = 48) 
+    Sum      = 3266592930.000000 
+    Mean     = 66665161.836735 
+    Variance = 75566101.000000 
+    Std Dev  = 8692.876451 
+    CoV      = 0.000130 
 
 ## Problème rencontré
 
